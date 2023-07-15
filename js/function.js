@@ -1,13 +1,12 @@
 const gameCont = document.querySelector(".game-cont");
 let score = document.getElementById("display");
 
-let duration = 6;
-let speed = 1000
+let duration = 9;
+let speed = 1000;
 document.addEventListener("click", (e) => {
     let value = e.target;
-    console.log(value.id);
     if (value.id === "monitor") {
-        value.style.display = "none";
+        value.parentElement.removeChild(value);
         if (score.innerText == "") {
             score.innerText = 10;
         } else {
@@ -20,18 +19,28 @@ let interval;
 let playBtn = document.getElementById("play");
 playBtn.addEventListener('click', () => {
     interval = setInterval(randomPlacement, speed);
+    setInterval(FirstElement, 20);
 });
 
 //* create a function to change the speed 
-function speedChange(){
-    if(parseInt(score.innerText) > 45){
-        duration -= .5;
-    } else if (parseInt(score.innerText) > 65) {
-        duration -= 1;
-    } else if (parseInt(score.innerText) > 85){
-        duration -= .5;
-    } else if (parseInt(score.innerText) > 105) {
-        duration -= .5;
+function speedChange() {
+    scorevalue = parseInt(score.innerText);
+    if (scorevalue <= 45) {
+        duration = duration;
+    } else if (scorevalue <= 65 ) {
+        duration = 7;
+    } else if (scorevalue <= 85) {
+        duration = 5;
+    } else if (scorevalue <= 135) {
+        duration = 4;
+        speed = 500;
+    } else if (scorevalue <= 185 ) {
+        duration = 3.5;
+    } else if (scorevalue <= 220) {
+        duration = 3;
+    } else if (scorevalue > 250) {
+        duration = 2.65;
+        speed = 300;
     }
     clearInterval(interval);
     interval = setInterval(randomPlacement, speed);
@@ -42,8 +51,8 @@ class ImageConstruct {
     constructor(object) {
         this.image = document.createElement("img");
         this.image.setAttribute("src", object['link']);
-        this.image.width = 60;
-        this.image.height = 60;
+        this.image.width = 90;
+        this.image.height = 90;
         this.image.id = object['id'];
     }
 }
@@ -82,22 +91,28 @@ function randomVal(max) {
     return (value = Math.floor(Math.random() * max))
 }
 
-
+let flag = false;
 function randomPlacement() {
     let arr = Object.keys(urlLinks);
     let val = randChoice(arr);
     let gamePiece = new ImageConstruct(urlLinks[val]).image;
     gamePiece.classList.add("gamePiece");
     gamePiece.style.animationDuration = `${duration}s`;
-    let leftIndex = randomVal(60);
-    gamePiece.style.left = `${leftIndex}%`;
-
+    if (!flag) {
+        let leftIndex = randomVal(60);
+        gamePiece.style.left = `${leftIndex}%`;
+        flag = true
+    } else {
+        let rightIndex = randomVal(60);
+        gamePiece.style.right = `${rightIndex}%`;
+        flag = false;
+    }
     if (gameCont.firstElementChild != "") {
         gameCont.appendChild(gamePiece);
         let childArr = gameCont.children;
         if ((childArr.length > 10)) {
-            for (let x = 0; x < 3; x++) {
-                gameCont.removeChild(gameCont.children[x]);
+            while (childArr.length > 2) {
+                gameCont.removeChild(gameCont.firstElementChild);
             }
         }
     }
@@ -107,4 +122,11 @@ let pauseBtn = document.getElementById("pause");
 pauseBtn.addEventListener('click', () => {
     clearInterval(interval);
 })
-
+function FirstElement() {
+    if (gameCont.children.length > 0) {
+        let initElem = gameCont.firstElementChild;
+        if (initElem.offsetTop < -50) {
+            gameCont.removeChild(initElem);
+        }
+    }
+}
