@@ -15,15 +15,15 @@ body{
     background: black;
     justify-content: space-around;
 }
-.nav-btn, .nav-select {
+.nav-btn {
 width: 12vw;
 font-size: 4vh;
 font-weight: bold;
 }
 .game-cont{
     background: #fff3;
-    height: 70vh;
-    width: 85vw;
+    height: 90vh;
+    width: 90vw;
     border: 5px black;
     border-style:groove;
     margin: auto;
@@ -53,8 +53,12 @@ font-weight: bold;
     }
 }
 
-#display {
+.nav-display {
     background: white;
+    width: 12vw;
+    padding-top: 1vh;
+    font-weight: bold;
+    font-size: 4vh;
     text-align: center;
 }
 .image-cont {

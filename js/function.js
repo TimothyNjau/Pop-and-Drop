@@ -1,23 +1,21 @@
 const gameCont = document.querySelector(".game-cont");
 let score = document.getElementById("display");
+const timer = document.getElementById("timer");
 
-let duration = 9;
+let duration = 7;
 let speed = 1000;
 document.addEventListener("click", (e) => {
     let value = e.target;
     if (value.id === "monitor") {
         value.parentElement.removeChild(value);
-        if (score.innerText == "") {
-            score.innerText = 10;
-        } else {
-            score.innerText = parseInt(score.innerText) + 10;
-            speedChange();
-        }
+        score.innerText = parseInt(score.innerText) + 10;
+        speedChange();
     }
 });
 let interval;
 let playBtn = document.getElementById("play");
 playBtn.addEventListener('click', () => {
+    setInterval(updateTimer, 1000);
     interval = setInterval(randomPlacement, speed);
     setInterval(FirstElement, 20);
 });
@@ -28,11 +26,11 @@ function speedChange() {
     if (scorevalue <= 45) {
         duration = duration;
     } else if (scorevalue <= 65 ) {
-        duration = 7;
-    } else if (scorevalue <= 85) {
         duration = 5;
-    } else if (scorevalue <= 135) {
+    } else if (scorevalue <= 85) {
         duration = 4;
+    } else if (scorevalue <= 135) {
+        duration = 3.75;
         speed = 500;
     } else if (scorevalue <= 185 ) {
         duration = 3.5;
@@ -51,8 +49,8 @@ class ImageConstruct {
     constructor(object) {
         this.image = document.createElement("img");
         this.image.setAttribute("src", object['link']);
-        this.image.width = 90;
-        this.image.height = 90;
+        this.image.width = 80;
+        this.image.height = 80;
         this.image.id = object['id'];
     }
 }
@@ -111,8 +109,8 @@ function randomPlacement() {
         gameCont.appendChild(gamePiece);
         let childArr = gameCont.children;
         if ((childArr.length > 10)) {
-            while (childArr.length > 2) {
-                gameCont.removeChild(gameCont.firstElementChild);
+            while (childArr.length > 5) {
+                //gameCont.removeChild(gameCont.firstElementChild);
             }
         }
     }
@@ -125,8 +123,22 @@ pauseBtn.addEventListener('click', () => {
 function FirstElement() {
     if (gameCont.children.length > 0) {
         let initElem = gameCont.firstElementChild;
-        if (initElem.offsetTop < -50) {
-            gameCont.removeChild(initElem);
+        if (initElem.offsetTop < -30) {
+            gameCont.removeChild(gameCont.firstElementChild);
         }
     }
+}
+
+function updateTimer() {
+    let timeArr = timer.innerText.split(":");
+    let seconds = parseInt(timeArr[1]);
+    if( seconds > 0){
+        seconds--;
+
+    } else if (seconds == 0){
+        seconds = "00";
+        clearInterval(interval);
+    }
+    timeArr[1] = seconds;
+    timer.innerText = timeArr.join(":");
 }
